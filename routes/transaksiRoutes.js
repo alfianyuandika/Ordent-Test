@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-// const transaksiValidator = require("../middlewares/validators/transaksiValidator");
+const transaksiValidator = require("../middlewares/validators/transaksiValidator");
 
 const transaksiController = require("../controllers/transaksiController");
 
@@ -10,7 +10,7 @@ const auth = require("../middlewares/auth");
 router.post(
   "/order",
   auth.peminjam,
-  // transaksiValidator.create,
+  transaksiValidator.create,
   transaksiController.createTransaksi
 );
 

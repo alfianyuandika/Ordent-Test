@@ -1,18 +1,30 @@
-const { transaksi, produk, user } = require("../../db/models");
+const { author, buku, genre, transaksi, user } = require("../../db/models");
 const validator = require("validator");
 
 module.exports.create = async (req, res, next) => {
   try {
     let findData = await Promise.all([
-      produk.findOne({
-        where: { id: req.body.produk_id },
+      buku.findOne({
+        where: { id: req.body.id_buku },
+      }),
+      user.findOne({
+        where: { id: req.user.id },
       }),
     ]);
 
+    console.log("data", findData[0].dataValues.stok);
     let errors = [];
 
-    if (!findData) {
-      errors.push("Produk Not Found");
+    if (!findData[0]) {
+      errors.push("Buku tidak ditemukan");
+    }
+
+    if (findData[0].dataValues.stok < 1) {
+      errors.push("Stok buku sedang kosong");
+    }
+
+    if (!findData[1]) {
+      errors.push("User tidak ditemukan");
     }
 
     if (errors.length > 0) {

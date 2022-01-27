@@ -9,6 +9,7 @@ const {
 
 class TransaksiController {
   async createTransaksi(req, res) {
+    let transaction = await sequelize.transaction();
     try {
       let findData = await Promise.all([
         buku.findOne({ where: { id: req.body.id_buku } }),
@@ -44,13 +45,20 @@ class TransaksiController {
         tanggal_terbit,
         stok,
       });
+
+      await buku.decrement("stok", {
+        where: { id: data.id_buku },
+        transaction,
+      });
+      transaction.commit();
+
       let data = await transaksi.findOne({
         where: { id: createdData.id },
         attributes: ["id", ["createdAt", "waktu_peminjaman"]],
         include: [
           {
             model: buku,
-            attributes: ["id", "judul", "edisi", "tanggal_terbit", "stok"],
+            attributes: ["id", "judul", "edisi", "tanggal_terbit"],
             include: [
               {
                 model: author,
@@ -69,12 +77,13 @@ class TransaksiController {
         ],
       });
 
+     
+
       return res.status(201).json({
         message: "Success",
         data,
       });
     } catch (e) {
-      
       return res.status(500).json({
         message: "Internal Server Error",
         error: e,
@@ -121,7 +130,6 @@ class TransaksiController {
         });
       }
     } catch (e) {
-      
       return res.status(500).json({
         message: "Internal Server Error",
         error: e,
@@ -216,7 +224,6 @@ class TransaksiController {
       });
     }
   }
-
 
   async getAllOwnTransaksi(req, res) {
     try {
