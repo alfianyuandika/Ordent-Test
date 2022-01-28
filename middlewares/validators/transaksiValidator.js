@@ -1,7 +1,7 @@
 const { author, buku, genre, transaksi, user } = require("../../db/models");
 const validator = require("validator");
 
-module.exports.create = async (req, res, next) => {
+exports.create = async (req, res, next) => {
   try {
     let findData = await Promise.all([
       buku.findOne({
@@ -12,17 +12,13 @@ module.exports.create = async (req, res, next) => {
       }),
     ]);
 
-    console.log("data", findData[0].dataValues.stok);
+   
     let errors = [];
 
-    if (!findData[0]) {
-      errors.push("Buku tidak ditemukan");
+    if (!findData[0] || findData[0].stok < 1) {
+      errors.push("Stok buku sedang kosong atau Judul buku tidak ditemukan");
     }
-
-    if (findData[0].dataValues.stok < 1) {
-      errors.push("Stok buku sedang kosong");
-    }
-
+   
     if (!findData[1]) {
       errors.push("User tidak ditemukan");
     }
@@ -35,9 +31,31 @@ module.exports.create = async (req, res, next) => {
 
     next();
   } catch (e) {
+   console.log("test error :", e)
     return res.status(500).json({
       message: "Internal Server Error",
       error: e,
+    });
+  }
+};
+
+exports.getAllUserTransaksi = async (req, res, next) => {
+  try {
+    let findData = await transaksi.findAll({
+      where: { id_user: req.body.id_user },
+    });
+
+    if (!findData) {
+      return res.status(404).json({
+        message: "User tidak ditemukan",
+      });
+    }
+
+    next();
+  } catch (e) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: e.message,
     });
   }
 };

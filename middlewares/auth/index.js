@@ -51,7 +51,7 @@ passport.use(
         });
       } catch (e) {
         return done(null, false, {
-          message: "Email has been used",
+          message: "Email sudah terdaftar",
         });
       }
     }
@@ -93,7 +93,7 @@ passport.use(
 
         if (!userSignIn) {
           return done(null, false, {
-            message: "Email not found",
+            message: "Email tidak ditemukan",
           });
         }
 
@@ -101,7 +101,7 @@ passport.use(
 
         if (!validate) {
           return done(null, false, {
-            message: "Wrong password",
+            message: "Password yang digunakan salah",
           });
         }
         

@@ -22,7 +22,7 @@ router.post(
 router.delete(
   "/delete/:id",
   auth.admin,
-  // bukuValidator.delete,
+  bukuValidator.delete,
   bukuController.deleteBuku
 );
 

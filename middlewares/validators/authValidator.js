@@ -5,17 +5,17 @@ exports.signup = async (req, res, next) => {
     let errors = [];
 
     if (!validator.isEmail(req.body.email)) {
-      errors.push("Email field must be valid email");
+      errors.push("Gunakan email yang valid");
     }
 
     if (!validator.isStrongPassword(req.body.password)) {
       errors.push(
-        "Password needs (uppercase & lowercase characters, number, and symbol)"
+        "Password membutuhkan huruf besar, huruf kecil, angka dan simbol"
       );
     }
 
     if (req.body.confirm_password !== req.body.password) {
-      errors.push("Password confirmation must be same as password");
+      errors.push("Password tidak sama");
     }
     
     if (errors.length > 0) {
@@ -38,12 +38,12 @@ exports.signin = async (req, res, next) => {
     let errors = [];
 
     if (!validator.isEmail(req.body.email)) {
-      errors.push("Email field must be valid email");
+      errors.push("Gunakan email yang valid");
     }
 
     if (!validator.isStrongPassword(req.body.password)) {
       errors.push(
-        "Password needs (uppercase & lowercase characters, number, and symbol)"
+        "Password membutuhkan huruf besar, huruf kecil, angka dan simbol"
       );
     }
 

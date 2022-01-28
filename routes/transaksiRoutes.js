@@ -16,13 +16,12 @@ router.post(
 
 router.get("/", auth.admin, transaksiController.getAllTransaksi);
 
-router.get("/user", auth.admin, transaksiController.getAllUserTransaksi);
-
 router.get("/:id", auth.admin, transaksiController.getOneTransaksi);
 
-router.get("/own/all", auth.peminjam, transaksiController.getAllOwnTransaksi);
+router.get("/transaksi/user", auth.admin, transaksiValidator.getAllUserTransaksi, transaksiController.getAllUserTransaksi);
 
+router.get("/own/:id", auth.peminjam, transaksiController.getOwnOneTransaksi);
 
-
+router.get("/own/own/all", auth.peminjam, transaksiController.getAllOwnTransaksi);
 
 module.exports = router;
